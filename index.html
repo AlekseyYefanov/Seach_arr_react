@@ -28,7 +28,7 @@
                 id: 3,
                 name: 'Luke Skywalker',
                 phoneNumber: '+250976654433',
-                image: 'http://www.youshouldshare.me/wp-content/uploads/2015/03/14264215682890-anigif_enhanced-buzz-13518-1367608452-4.gif'
+                image: 'https://i.gifer.com/VkXm.gif'
             }, {
                 id: 4,
                 name: 'Chewbacca',
@@ -37,17 +37,55 @@
             }
         ];
 
-    const ContactList = React.createClass ({
-        render: function ({}) {
-            return (
-                    <div>
+        const Contact = React.createClass ({
+            render: function () {
+                return <li className="contact">
+                    <img className="contact-image" src={this.props.avatar} width="60px" height="60px" />
+                    <div className="contact-info">
+                        <div className="contact-name">{this.props.name}</div>
+                        <div className="contact-number">{this.props.phoneNumber}</div>
+                    </div>
+                </li>
+            }
+        });
 
+
+        const ContactList = React.createClass ({
+            getInitialState: function () {
+                return{
+                    displayedContacts : CONTACTS
+                };
+            },
+
+            handleSearch: function (event) {
+                const searchQuery = event.target.value.toLowerCase();
+                const displayedContacts = CONTACTS.filter(function (el) {
+                    const searchValue = el.name.toLowerCase();
+                    return searchValue.indexOf(searchQuery) !== -1;
+                });
+                console.log(displayedContacts);
+            },
+
+        render: function () {
+            return (
+                    <div className="contacts">
+                        <input type="text" className="search-field" onChange={this.handleSearch} />
+                        <ul className="contacts-list">
+                            {
+                                CONTACTS.map(function (el) {
+                                    return <Contact key={el.id}
+                                                    name={el.name}
+                                                    avatar={el.image}
+                                                    phoneNumber={el.phoneNumber} />
+                                })
+                            }
+                        </ul>
                     </div>
                 );
         }
     });
 
-    ReacrDOM.render(
+    ReactDOM.render(
         <ContactList/>,
         document.getElementById('content')
     );
